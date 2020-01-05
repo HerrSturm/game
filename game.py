@@ -1,12 +1,14 @@
-import sys, pygame, time, math, movement, gameEvent
+import sys, pygame, time, math, random, movement, gameEvent, objectBox
 pygame.init()
 
 size = width, height = 700, 700
 speed = 3
-ballPos = [350,350]
+ballPos = [350,700]
 goal = [300,0,100,20]
 direction = [speed,0]
-black = 0, 0, 0
+black = (0, 0, 0)
+blue = (0,0, 255)
+red = (255,0,0)
 hit = False
 counter = 0
 
@@ -15,7 +17,9 @@ screen = pygame.display.set_mode(size)
 
 ball = pygame.draw.circle(screen,(255,255,255), ballPos,10)
 goal = pygame.draw.rect(screen,(255,255,0),goal,0)
-pygame.display.flip()
+flyingObjects =  []
+for i in range (5):
+    flyingObjects.append(objectBox.flyingBox([200+50*i,200+ 80*i],(10,20),[4,0], blue))
 
 
 
@@ -41,16 +45,23 @@ while not(hit):
     screen = pygame.display.set_mode(size)
     goal = pygame.draw.rect(screen,(255,255,0),(300,0,100,20),0)
     ball = pygame.draw.circle(screen,(255,255,255), ballPos,10)
+    for i in flyingObjects:
+        i.update()
     time.sleep(0.025)
 
     #checking out if goal is hit
-    hit = gameEvent.collision(ballPos,[10,10],goal,[100,20])
-
-    #accelerating the ball
-    counter+= 1
-    if counter == 1000:
+    if gameEvent.collision(ballPos,[10,10],goal,[100,20]):
+        ballPos = [350,680]
+        flyingObjects.append(objectBox.flyingBox([200,200],(10,20),[4,0], red))
         speed +=1
-        counter = 0
-        print(speed)
+        direction = [0,speed]
+        for i in flyingObjects:
+            i.changeSpeed(1)
+            i.randomPosition()
+            print(len(flyingObjects))
+
+    for i in flyingObjects:
+        if gameEvent.collision(ballPos,[10,10],i.position,i.rect):
+            sys.exit()
+
     pygame.display.flip()
-    print(direction)
