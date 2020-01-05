@@ -54,7 +54,7 @@ while not(hit):
         ballPos = [350,680]
         flyingObjects.append(objectBox.flyingBox([200,200],(10,20),[4,0], red))
         speed +=1
-        direction = [0,speed]
+        direction = [0,-speed]
         for i in flyingObjects:
             i.changeSpeed(1)
             i.randomPosition()
