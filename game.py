@@ -11,6 +11,7 @@ blue = (0,0, 255)
 red = (255,0,0)
 hit = False
 counter = 0
+clock = pygame.time.Clock()
 
 pygame.init()
 screen = pygame.display.set_mode(size)
@@ -47,7 +48,7 @@ while not(hit):
     ball = pygame.draw.circle(screen,(255,255,255), ballPos,10)
     for i in flyingObjects:
         i.update()
-    time.sleep(0.025)
+    clock.tick(30)
 
     #checking out if goal is hit
     if gameEvent.collision(ballPos,[10,10],goal,[100,20]):
